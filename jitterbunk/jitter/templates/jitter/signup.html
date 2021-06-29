@@ -1,0 +1,31 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'jitter/style.css' %}" />
+<h1 class='jitterbunk-header'>SIGNUP</h1>
+{% if error_msg %}
+<h2 class='jitterbunk-header'>{{error_msg}}</h2>
+{% endif %}
+<div class = 'jitterbunk-container-signup' >
+    <form action = "{% url 'jitter:signup' %}" method="POST" id="form_signup">
+        {% csrf_token %}
+        <label for="username">username: </label>
+        <input type="text" name="username" id="username" placeholder="username">
+        <br>
+        <label for="password">password: </label>
+        <input type="text" name="password" id="password" placeholder="password">
+        <br>
+        <label for="email">email: </label>
+        <input type="text" name="email" id="email" placeholder="email@gmail.com">
+        <br>
+        <label for="first_name">first: </label>
+        <input type="text" name="first_name" id="first_name" placeholder="first name">
+        <br>
+        <label for="last_name">last: </label>
+        <input type="text" name="last_name" id="last_name" placeholder="last name">
+        <br>
+        <label for="photo">photo: </label>
+        <input type="text" name="photo_url" id="photo_url" placeholder="photo url">
+        <input type="submit" form="form_signup" value="SIGNUP"></button>
+        </table>
+    </form>
+</div>

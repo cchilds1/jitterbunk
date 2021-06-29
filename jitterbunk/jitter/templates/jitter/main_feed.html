@@ -1,0 +1,55 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'jitter/style.css' %}" />
+<h1 class='jitterbunk-header'>JITTERBUNK</h1>
+
+<table class='jitterbunk-table' style='float:left' >
+    <thead>
+        <tr>
+            <th> 
+                FROM
+                <!-- from column sort buttons -->
+                <button onclick= "location.href='{% url 'jitter:main_feed' 'from_user__username' %}'">▲</button>
+                <button onclick= "location.href='{% url 'jitter:main_feed' '-from_user__username' %}'">▼</button>
+            </th>
+            <th> 
+                TO
+                <!-- to column sort buttons -->
+                <button onclick= "location.href='{% url 'jitter:main_feed' 'to_user__username' %}'">▲</button>
+                <button onclick= "location.href='{% url 'jitter:main_feed' '-to_user__username' %}'">▼</button>
+            </th>
+            <th> 
+                TIME
+                <!-- time column sort buttons --> 
+                <button onclick= "location.href='{% url 'jitter:main_feed' 'time' %}'">▲</button>
+                <button onclick= "location.href='{% url 'jitter:main_feed' '-time' %}'">▼</button>
+            </th>
+        </tr>
+    </thead>
+{% for bunk in bunks %}
+    <tr>
+        <td> <img src="{{bunk.from_user.photo}}" alt="profile photo" height=50px width=50px> 
+            <a href="{% url 'jitter:personal_feed' bunk.from_user.username '-time' '-time'%}">{{ bunk.from_user }}</a> </td>
+        <td> <img src="{{bunk.to_user.photo}}" alt="profile photo" height=50px width=50px> 
+            <a href="{% url 'jitter:personal_feed' bunk.to_user.username '-time' '-time' %}">{{ bunk.to_user }}</a> </td>
+        <td> {{ bunk.time }} </td>
+    </tr>
+{% endfor %}
+</table>
+
+<table class='jitterbunk-table' style='width: 40%; float:right' >
+    <thead>
+        <tr>
+            <th>Active Users</th>
+            <th>Total Bunks</th>
+        </tr>
+    </thead>
+{% for u in active_users %}
+    <tr>
+        <td> <img src="{{u.photo}}" alt="profile photo" height=50px width=50px> 
+            <a href="{% url 'jitter:personal_feed' u.username '-time' '-time' %}">{{ u.username }}</a> </td>
+        <td> {{u.num_bunks }} </td>
+    </tr>
+{% endfor %}
+</table>
+

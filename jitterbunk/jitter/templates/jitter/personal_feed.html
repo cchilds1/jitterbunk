@@ -1,0 +1,92 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'jitter/style.css' %}" />
+<h1 class='jitterbunk-header'>{{ user.username }}'s Bunk Page</h1>
+
+
+<table class='jitterbunk-table' style='float:left; width:45%'>
+    <caption class='jitterbunk-caption'>INBOX</caption>
+    <thead>
+        <tr>
+            <th style='border-top-left-radius: 0px;'> 
+                FROM
+                <!-- from column sort buttons -->
+                <button onclick= "location.href='{% url 'jitter:personal_feed' user.username 'from_user__username' 'old' %}'">▲</button>
+                <button onclick= "location.href='{% url 'jitter:personal_feed' user.username '-from_user__username' 'old' %}'">▼</button>
+            </th>
+            <th style='border-top-right-radius:0px;'> 
+                TIME 
+                <!-- time column sort buttons -->
+                <button onclick= "location.href='{% url 'jitter:personal_feed' user.username  'time' 'old' %}'">▲</button>
+                <button onclick= "location.href='{% url 'jitter:personal_feed' user.username  '-time' 'old' %}'">▼</button>
+            </th>
+        </tr>
+    </thead>
+{% for bunk in personal_bunks %}
+    <tr>
+        <td> <img src="{{bunk.from_user.photo}}" alt="profile photo" height=50px width=50px> 
+            <a href="{% url 'jitter:personal_feed' bunk.from_user.username '-time' '-time' %}">{{ bunk.from_user }}</a> </td>
+        <td> {{ bunk.time }} </td>
+    </tr>
+{% endfor %}
+</table>
+
+<table class='jitterbunk-table' style='float:right; width:45%'>
+    <caption class='jitterbunk-caption'>SENT</caption>
+    <thead>
+        <tr>
+            <th style='border-top-left-radius: 0px;'> 
+                TO
+                <!-- to column sort buttons -->
+                <button onclick= "location.href='{% url 'jitter:personal_feed' user.username 'old' 'to_user__username' %}'">▲</button>
+                <button onclick= "location.href='{% url 'jitter:personal_feed' user.username 'old' '-to_user__username' %}'">▼</button>
+            </th>
+            <th style='border-top-right-radius:0px;'> 
+                TIME 
+                <!-- time column sort buttons -->
+                <button onclick= "location.href='{% url 'jitter:personal_feed' user.username 'old' 'time' %}'">▲</button>
+                <button onclick= "location.href='{% url 'jitter:personal_feed' user.username 'old' '-time' %}'">▼</button>
+            </th>
+        </tr>
+    </thead>
+{% for bunk in bunks_sent %}
+    <tr>
+        <td> <img src="{{bunk.to_user.photo}}" alt="profile photo" height=50px width=50px> 
+            <a href="{% url 'jitter:personal_feed' bunk.to_user.username '-time' '-time' %}">{{ bunk.to_user }}</a> </td>
+        <td> {{ bunk.time }} </td>
+    </tr>
+{% endfor %}
+</table>
+
+<br>
+<br>
+<span class='bottom-screen'>
+    <!-- only allow user to bunk another user if the user is logged in -->
+    {% if user.logged_in %}
+        <div class='jitterbunk-container'>
+            <form action = "{% url 'jitter:add_bunk' user.username %}" method="POST" id="form_bunk">
+                {% csrf_token %}
+                {{ bunk_form }}
+                <input type="submit" form="form_bunk" value="Bunk!">
+            </form>        
+        </div>
+
+        <div class='jitterbunk-container'>
+            <form action = "{% url 'jitter:logout' user.username %}" method="POST" id="form_logout" >
+                {% csrf_token %}
+                <input type="submit" value="LOGOUT" name="logout_input" id="logout_input">
+            </form>
+        </div>
+    {% else %}
+        <div class='jitterbunk-container'>
+            <form action="{% url 'jitter:login' %}" method="GET">
+                <input type="submit" value="LOGIN" />
+            </form>
+        </div>
+    {% endif %}
+        <div class='jitterbunk-container'>
+            <form action="{% url 'jitter:main_feed' %}" method="GET">
+                <input type="submit" value="HOME" />
+            </form>
+        </div>
+</span>
